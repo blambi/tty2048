@@ -8,12 +8,12 @@ defmodule Tty2048.Grid.Formatter do
     Enum.map(row, &format_cell/1)
   end
 
-  @empty_cell [:faint, :white, "   *", :reset]
+  @empty_cell [:faint, :white, " ", :reset]
 
   defp format_cell(0), do: @empty_cell
   defp format_cell(num) do
     integer_to_string(num)
-    |> String.rjust(4)
+    |> String.rjust(2)
     |> format_cell(num)
   end
 
@@ -26,23 +26,26 @@ defmodule Tty2048.Grid.Formatter do
   end
 
   defp format_cell(data, num) do
-    [colorify(num), data]
+    case num do
+      x when x < 128 -> colorify(num) ++ ['■', :reset]
+      x when x > 64 -> colorify(num) ++ ['▲', :reset]
+    end
   end
 
   defp colorify(num) do
     case num do
-      2    -> :green
-      4    -> :yellow
-      8    -> :cyan
-      16   -> :blue
-      32   -> :red
-      64   -> :magenta
-      128  -> :yellow
-      256  -> :cyan
-      512  -> :blue
-      1024 -> :magenta
-      2048 -> :red
-      _    -> :white
+      2    -> [:green]
+      4    -> [:yellow]
+      8    -> [:cyan]
+      16   -> [:blue]
+      32   -> [:red]
+      64   -> [:magenta]
+      128  -> [:bright, :yellow]  # Bright
+      256  -> [:bright, :cyan]    # Bright
+      512  -> [:bright, :blue]    # Bright
+      1024 -> [:bright, :magenta] # Bright
+      2048 -> [:bright, :red]     # Bright
+      _    -> [:white]
     end
   end
 end
