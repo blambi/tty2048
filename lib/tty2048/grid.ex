@@ -1,6 +1,7 @@
 defmodule Tty2048.Grid do
   def new(size) when size > 0 do
     make_grid(size)
+    |> add_corners(size)
     |> seed |> seed
   end
 
@@ -124,5 +125,13 @@ defmodule Tty2048.Grid do
 
       _cell, acc -> acc
     end
+  end
+
+  defp add_corners(grid, size) do
+    m_corner = size - 1
+    Enum.reduce([{0, 0}, {0, m_corner}, {m_corner, 0}, {m_corner , m_corner}],
+                grid, fn(x, grid) ->
+                  insert_at(x, 8, grid)
+    end)
   end
 end
