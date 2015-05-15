@@ -27,6 +27,7 @@ defmodule Tty2048.Grid.Formatter do
 
   defp format_cell(data, num) do
     case num do
+      -1 -> [:red, '◪', :reset]
       x when x < 128 -> colorify(num) ++ ['■', :reset]
       x when x > 64 -> colorify(num) ++ ['▲', :reset]
     end

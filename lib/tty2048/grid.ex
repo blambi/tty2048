@@ -85,7 +85,7 @@ defmodule Tty2048.Grid do
   defp merge([], acc, tail, points),
     do: {acc, tail, points}
 
-  defp merge([el, el | rest], acc, tail, points) do
+  defp merge([el, el | rest], acc, tail, points) when el != -1 do
     sum = el + el
 
     merge(rest, [sum | acc], [0 | tail], points + sum)
@@ -130,8 +130,6 @@ defmodule Tty2048.Grid do
   defp add_corners(grid, size) do
     m_corner = size - 1
     Enum.reduce([{0, 0}, {0, m_corner}, {m_corner, 0}, {m_corner , m_corner}],
-                grid, fn(x, grid) ->
-                  insert_at(x, 8, grid)
-    end)
+                grid, &insert_at(&1, -1, &2))
   end
 end
